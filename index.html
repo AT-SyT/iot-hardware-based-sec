@@ -1,0 +1,577 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Hardware Based IoT Security</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/beige.css">
+    <!--<link rel="stylesheet" href="css/theme/simple.css">-->
+    <!--<link rel="stylesheet" href="css/theme/night.css">-->
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+    <style>
+        .slides .header {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+        }
+
+        .slides .footer {
+            position: absolute;
+            bottom: 0%;
+            left: -25%;
+            font-size: 50%;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .left {
+            float: left;
+            width: 33%;
+        }
+
+        .middle {
+            display: inline-block;
+            width: 33%;
+        }
+
+        .right {
+            float: left;
+            width: 33%;
+        }
+        #left {
+          left:-8.33%;
+          text-align: left;
+          float: left;
+          width:50%;
+          z-index:-10;
+        }
+
+        #right {
+          left:31.25%;
+          top: 75px;
+          float: right;
+          text-align: right;
+          z-index:-10;
+          width:50%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="reveal">
+    <div class="slides">
+        <!--<div class="footer">
+            <p>https://goo.gl/RZWX4F</p>
+        </div>-->
+        <section data-transition="convex">
+            <h3>Hardware Based Secure Authentication in IoT Networks</h3>
+            <br>
+            <h5>Sebastian Seitner</h5>
+        </section>
+        <section data-transition="convex">
+            <div style="display: block;">
+                <div style="display: block"><p>Follow my slides on your device: </p>
+                    <a href="https://goo.gl/RZWX4F">https://goo.gl/RZWX4F</a></div>
+                <div style="display: block">
+                    <img src="http://localhost:8080/assets/qrcode.png" style="width: auto; height:550px;">
+                </div>
+            </div>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>IoT Networks</h1>
+            </section>
+            <section data-transition="convex">
+                <h2>Internet of Thing</h2>
+                <div style="display:inline-flex">
+                    <img style="border:none;" src="http://localhost:8000/assets/iot_network.png" />
+                </div>
+                <aside class="notes">
+                    Consists of many devices and gateways. 
+                    Collecting data and exchanging information
+                </aside>
+            </section>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Why security matters</h1>
+            </section>
+            <section data-transition="convex">
+                <h2>Sensitive and personal information</h2>
+                <ul>
+                    <li>Healthcare devices</li>
+                    <li>Door sensors</li>
+                    <li>...</li>
+                </ul>
+                <aside class="notes">
+                    Can leak personal health information
+                    Know when you are inside a room or at home at all
+                </aside>
+            </section>
+            <section data-transition="convex">
+                <h2>Cyber Physical Interaction</h2>
+                <ul>
+                    <li>Motor actuation</li>
+                    <li>Temperature controls</li>
+                    <li>Autonomous driving systems</li>
+                    <li>...</li>
+                </ul>
+                <aside class="notes">
+                    can do physical harm if compromised
+                    Fake temperature sensor to overheat a generator
+                    Steer car into wall etc. (example Jeep)
+                    German steel mill furnace overheated
+                </aside>
+            </section>
+            <aside class="notes">
+                
+            </aside>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Challenges</h1>
+                <aside class="notes">
+                    What makes this hard and why traditional options fail
+                </aside>
+            </section>
+            <section data-transition="convex">
+                <h2>Limited Resources</h2>
+                <div style="display: inline-block">
+                    <ul>
+                        <li class="fragment fade-up" data-fragment-index="1">Devices built for one job</li>
+                        <li class="fragment fade-up" data-fragment-index="2">Should be cheap and small</li>
+                        <li class="fragment fade-up" data-fragment-index="3">Power efficiency
+                            <ul>
+                                <li class="fragment fade-up" data-fragment-index="4">Battery powered devices</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            
+                <aside class="notes">
+                    <ul>
+                        <li>purpose built, enough resources for their job but no more</li>
+                        <li>limited budget</li>
+                        <li>battery powered, unchangeable batteries, long lifetime
+                        </li>
+                    </ul>
+                </aside>
+            </section>
+            <section data-transition="convex">
+                <h2>Physical (Non-)Security</h2>
+                <div style="display: inline-block">
+                    <ul>
+                        <li class="fragment fade-up" data-fragment-index="1">Devices are deployed everwhere</li>
+                        <li class="fragment fade-up" data-fragment-index="2">Adversary may get physical access</li>
+                        <li class="fragment fade-up" data-fragment-index="3">Attacker may read out memory content
+                        </li>
+                    </ul>
+                </div>
+            
+                <aside class="notes">
+                    <ul>
+                        <li>Everywhere, pervasive, unmonitored and unsecured</li>
+                        <li>=> Adversary can access devices physically (Sensor nodes, RFID cards, ...)</li>
+                        <li>Can't store secrets on devices!
+                        </li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Hardware Security Primitives</h1>
+            </section>
+            <section>
+                <h2>Two types presented here</h2>
+                <ul>
+                        <li class="fragment fade-up" data-fragment-index="1">Physical Unclonable Functions (PUFs)</li>
+                        <li class="fragment fade-up" data-fragment-index="2">Voltage over-scaling influenced adders</li>
+                    </ul>
+                    <aside class="notes">
+                    <p>Voltage over-scaling introduced later</p>
+                </aside>
+            </section>
+
+            <section data-transition="convex">
+                <h2>PUF</h2>
+                <p>Based on variations in manufacturing process</p>
+                <p>Circuits designed to expose them</p>
+            </section>
+            <section data-transition="convex">
+                <h2>Characteristics</h2>
+                <p>Physical one way function</p>
+                <p class="fragment fade-up" data-fragment-index="1">Operate on challenge-response principle</p>
+                <img class="fragment fade-in" data-fragment-index="1" style="border:none;" src="http://localhost:8000/assets/puf.png" />
+            </section>
+            <section data-transition="convex">
+             <h2>Output</h2>
+                <ul>
+                        <li class="fragment fade-up" data-fragment-index="1">Unique for each PUF</li>
+                        <li class="fragment fade-up" data-fragment-index="2">Hard to predict</li>
+                        <li class="fragment fade-up" data-fragment-index="3">Infeasable to get challenge when response is known</li>
+                        <li class="fragment fade-up" data-fragment-index="4">Same response for same challenge (except some noise)</li>
+                    </ul>
+            </section>
+            <section data-transition="convex">
+            
+             <h2>Challenge-Response Space</h2>
+                <p>Weak PUF: Small set of possible CRPs<p>
+                <p><span class="fragment highlight-green">Strong PUF</span>: Large set of possible CRPs</p>
+            </section>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Threat Model</h1>
+            </section>
+            <section data-transition="convex">
+            <h2>Adversary can... </h2>
+                <ul>
+                    <li class="fragment fade-up" data-fragment-index="1">eavesdrop on communcation</li>
+                    <li class="fragment fade-up" data-fragment-index="2">inject packets</li>
+                    <li class="fragment fade-up" data-fragment-index="3">replay messages</li>
+                    <li class="fragment fade-up" data-fragment-index="4">read out memory</li>
+                    <li class="fragment fade-up" data-fragment-index="5">measure PUF if not protected</li>
+                </ul>
+            </section>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex"><h1>PUF-Based Protocols</h1></section>
+            <section data-transition="convex">
+                <h2>Two Phases</h2>
+                <h3>Phase 1: Enrollment</h3>
+                <ul>
+                <li>Done before the device(claimant) is deployed</li>
+                <li>Server(Verifier) collects necessary information</li>
+                <li>Device made ready for deployment</li>
+                </ul>
+                <aside class="notes">
+                    <p>SERVER == GATEWAY</p>
+                    <ul>
+                    <li>Collect CRPs</li>
+                    <li>Initialize state</li>
+                    <li>Block physical access to enrollment interface</li>
+                    <li>Destroy enrollment interface (e.g. with fuses)</li>
+                    </ul>
+                </aside>
+            </section>
+            <section data-transition="convex">
+                <h2>Two Phases</h2>
+                <h3>Phase 2: Verification</h3>
+                <ul>
+                <li>Actual authentication is done</li>
+                </ul>
+                <aside class="notes">
+                    Only part of the app that can "change" state
+                </aside>
+            </section>
+            
+        </section>
+        <section data-transition="convex">
+           <section data-transition="convex">
+                <h1>Naive Protocol</h1>
+                <aside class="notes">
+                    
+                </aside>
+            </section>
+            <section data-transition="convex">
+                <h2>Enrollment</h2>
+                <ul>
+                <li>Collect many CRPs from the PUF</li>
+                <li>Index them by device ID</li>
+                </ul>
+                <aside class="notes">
+                    
+                </aside>
+            </section>
+            <section data-transition="convex">
+                <h2>Verification</h2>
+                <img style="border:none;" src="http://localhost:8000/assets/naive.png" />
+                <aside class="notes">
+                    
+                </aside>
+            </section>
+            <section data-transition="convex">
+                <h2>Drawbacks</h2>
+                <ul>
+                    <li>CRPs cannot be reused</li>
+                    <ul>
+                        <li>Limited amount of authentications</li>
+                        <li>Lots of CRPs to store</li>
+                    </ul>
+                    <li>No mutual authentication</li>
+                    <li>Vulnerable to Modeling attacks</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Reuse => Replay attack</li>
+                        <li>Describe Modeling attacks</li>
+                        <li>Almost all PUFs are mathematically cloneable</li>
+                        <li>Must counter this attack</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+         <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Hiding CRPs</h1>
+                <aside class="notes">
+                    <ul>
+                        <li>Classic crypto algroithms also don't expose secrets</li>
+                        <li>Countermeasure against modeling</li>
+                        <li>e.g. Zero Knowledge proof</li>
+                    </ul>
+                </aside>
+            </section>
+             <section data-transition="convex">
+                <h2>Possibilities</h2>
+                 
+                 <ul>
+                    <li>Obfuscation</li>
+                     <li>One-way functions</li>
+                     <li>Symmetric Cryptography</li>
+                     <li>Elliptic Curve Cryptography</li>
+                 </ul>
+             </section>
+             <aside class="notes">
+                    <p>More details in the paper</p>
+                </aside>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Challenge Obfuscation</h1>
+            </section>
+            <section data-transition="convex">
+                <h2>Challenge Obfuscation</h2>
+                <ul>
+                    <li>Never expose the full challenge</li>
+                    <li>Reconstruct a full challenge by randomly selecting a defined pattern</li>
+                    <li>Server simulates all possibilities with a model</li>
+                    <li>Accepts if there is a match</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Server stores mathematical model of PUF</li>
+                        <li>Increases collision probability</li>
+                        <li>Use Multiple PUFs combined => more hardware</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Hashing</h1>
+            </section>
+            <section data-transition="convex">
+                <h2>Hashing</h2>
+                <ul>
+                    <li>Makes error correction necessary</li>
+                     <ul>
+                         <li>Must have the same value to hash on each side</li>
+                    </ul>
+                    <li>Error correction exposes some information about the actual result</li>
+                    <ul>
+                        <li>Find a balance between error margin and remaining unpredictability</li>
+                    </ul>
+                </ul>
+            <aside class="notes">
+                    <ul>
+                        <li>Small Change in input => large change in output</li>
+                        <li>Exposed information == Side Information or Helper Data</li>
+                    </ul>
+                </aside>
+            </section>
+            <!--<section data-transition="convex">
+                <div id="left">
+                    <h2>Benefits</h2>
+                    <ul>
+                        <li>No CRPs are exposed</li>
+                        <li>Only need to store a single CRP</li>
+                    </ul>
+                </div>
+                <div id="right">
+                    <h2>Drawbacks</h2>
+                    <ul>
+                        <li>Reduces unpredictability</li>
+                    </ul>
+                </div>
+            </section>
+            -->
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Symmetric Cryptography</h1>
+            </section>
+            <section data-transition="convex">
+                <h2>Symmetric Cryptography</h2>
+                <ul>
+                    <li>Noise of PUF response is important</li>
+                    <li>Enables exchange of new CRP each round</li>
+                    <li>Possibility to aggree on a secure key based on available data</li>
+                    <!--<li>Higher latency</li>-->
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Two different approaches to noise</li>
+                        <ul><li>Rely on stable PUF and probability</li>
+                            <li>Apply Error correction</li>
+                        </ul>
+                        <li>Update CRP to be used</li>
+                        <li>Derive a secure session key</li>
+                        <li>mention higher latency?</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Assymetric Cryptography</h1>
+            </section>
+            <section data-transition="convex">
+                <h2>Using Elliptic Curve Cryptography (ECC)</h2>
+                <ul>
+                    <li>Small key size</li>
+                    <li>Server only stores Public Keys of the devices</li>
+                    <li>Used challenge and according helper data are public</li>
+                    <li>Private key reconstructed with PUF</li>
+                    <ul>
+                        <li>Only exists in memory when it is needed</li>
+                    </ul>
+                    <li>Key exchange possible</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Error correction necessary on device</li>
+                        <li>Exchange a secure session key</li>
+                        <li>ECC ElGamal proposed in literature</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+    
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h2>Voltage over-scaling (VOS)</h2>
+            </section>
+            <section data-transition="convex">
+                <h2>What is VOS?</h2>
+                <ul>
+                    <li>Operating a digital circuit below its nominal voltage</li>
+                    <ul><li>Reducing power consumption</li></ul>
+                    <li>Leads to errors in computations</li>
+                    <ul>
+                        <li>Timing constraints violated</li>
+                    </ul>
+                    <li>Exposes analog influences of underlying hardware</li>
+                    <li>Error patterns are unique</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Approximate computing</li>
+                        <li>Variations in manufacturing process</li>
+                        <li>errors can be profiled and modeled</li>
+                    </ul>
+                </aside>
+            </section>
+            
+        </section>
+         <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>VOS based authentication</h1>
+            </section>
+             <section data-transition="convex">
+                <h2>Enrollment</h2>
+                 <ul>
+                    <li>Password consisting of two keys stored on server</li>
+                     <li>VOS influenced adder is profiled and modeled</li>
+                 </ul>
+                 <aside class="notes">
+                      <ul>
+                        <li>Two factor authentication</li>
+                        <li>Usability depends on device type</li>
+                    </ul>
+                </aside>
+            </section>
+             <section data-transition="convex">
+                <h2>Verification</h2>
+                <img style="border:none;" src="http://localhost:8000/assets/vos.png" />
+                 <aside class="notes">
+                      <ul>
+                        <li>Two factor authentication</li>
+                        <li>Multiple users for 1 device</li>
+                        <li>One user on multiple devices</li>
+                          <li>Password single point of failure</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+         <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>Key Points</h1>
+                <ul>
+                <li>IoT security is challenging</li>
+                    <ul>
+                        <li>Constrained devices</li>
+                        
+                    </ul>
+                    <li>IoT security is very important</li>
+                    <ul>
+                        <li>Sensitive data</li>
+                        <li>Cyber-physical interaction</li>
+                    </ul>
+                    <li>Many devices are not physically secured</li>
+                    <li>Hardware security primitives are very promising</li>
+                </ul>
+            </section>
+        </section>
+    </div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        history: true,
+        slideNumber: 'c',
+        defaultTiming: 23,
+        multiplex: {
+            // Example values. To generate your own, see the socket.io server instructions.
+            secret: null, // null so the clients do not have control of the master presentation
+            id: 'c39e9f907e51a527', // id, obtained from socket.io server
+            url: 'https://reveal-js-multiplex-ccjbegmaii.now.sh' // Location of socket.io server
+	   },
+
+        dependencies: [
+            {src: '//cdn.socket.io/socket.io-1.3.5.js', async: true},
+            {src: 'plugin/multiplex/client.js', async: true},
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            }
+        ]
+    });
+</script>
+
+</body>
+</html>
