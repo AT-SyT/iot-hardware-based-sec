@@ -76,12 +76,17 @@
 <div class="reveal">
     <div class="slides">
         <div class="footer">
-            <p>https://goo.gl/oHuOuV</p>
+            <p style="margin-left:50px; margin-bottom:-30px;">https://goo.gl/oHuOuV</p>
         </div>
         <section data-transition="convex">
             <h3>Hardware Based Secure Authentication in IoT Networks</h3>
             <br>
             <h5>Sebastian Seitner</h5>
+            <aside class="notes">
+                    Introduce myself. 
+                    Mention: 
+                        Not want to be spied on or attacked by my gadgets and helpers
+                </aside>
         </section>
         <!--
         <section data-transition="convex">
@@ -94,21 +99,7 @@
             </div>
         </section>
 -->
-        <section data-transition="convex">
-            <section data-transition="convex">
-                <h1>IoT Networks</h1>
-            </section>
-            <section data-transition="convex">
-                <h2>Internet of Things</h2>
-                <div style="display:inline-flex">
-                    <img style="border:none;" src="http://localhost:8000/assets/iot_network.png" />
-                </div>
-                <aside class="notes">
-                    Consists of many devices and gateways. 
-                    Collecting data and exchanging information
-                </aside>
-            </section>
-        </section>
+        
         <section data-transition="convex">
             <section data-transition="convex">
                 <h1>Why security matters</h1>
@@ -143,6 +134,21 @@
             <aside class="notes">
                 
             </aside>
+        </section>
+        <section data-transition="convex">
+            <section data-transition="convex">
+                <h1>IoT Networks</h1>
+            </section>
+            <section data-transition="convex">
+                <h2>Internet of Things</h2>
+                <div style="display:inline-flex">
+                    <img style="border:none;" src="http://localhost:8000/assets/iot_network.png" />
+                </div>
+                <aside class="notes">
+                    Consists of many devices and gateways. 
+                    Collecting data and exchanging information
+                </aside>
+            </section>
         </section>
         <section data-transition="convex">
             <section data-transition="convex">
@@ -217,9 +223,13 @@
             </section>
             <section data-transition="convex">
                 <h2>Characteristics</h2>
-                <p>Physical one way function</p>
-                <p class="fragment fade-up" data-fragment-index="1">Operate on challenge-response principle</p>
-                <img class="fragment fade-in" data-fragment-index="1" style="border:none;" src="http://localhost:8000/assets/puf.png" />
+                <p>Physically unclonable</p>
+                <p class="fragment fade-up" data-fragment-index="1">Physical one way function</p>
+                <p class="fragment fade-up" data-fragment-index="2">Operate on challenge-response principle</p>
+                <img class="fragment fade-in" data-fragment-index="2" style="border:none;" src="http://localhost:8000/assets/puf.png" />
+                <aside class="notes">
+                    <p>Many ARE mathematically coneable</p>
+                </aside>
             </section>
             <section data-transition="convex">
              <h2>Output</h2>
@@ -258,9 +268,9 @@
                 <h2>Two Phases</h2>
                 <h3>Phase 1: Enrollment</h3>
                 <ul>
-                <li>Done before the device(claimant) is deployed</li>
-                <li>Server(Verifier) collects necessary information</li>
-                <li>Device made ready for deployment</li>
+                <li class="fragment fade-up" data-fragment-index="1">Done before the device(claimant) is deployed</li>
+                <li class="fragment fade-up" data-fragment-index="2">Server(Verifier) collects necessary information</li>
+                <li class="fragment fade-up" data-fragment-index="3">Device made ready for deployment</li>
                 </ul>
                 <aside class="notes">
                     <p>SERVER == GATEWAY</p>
@@ -279,7 +289,7 @@
                 <li>Actual authentication is done</li>
                 </ul>
                 <aside class="notes">
-                    Only part of the app that can "change" state
+                    
                 </aside>
             </section>
             
@@ -311,13 +321,13 @@
             <section data-transition="convex">
                 <h2>Drawbacks</h2>
                 <ul>
-                    <li>CRPs cannot be reused</li>
+                    <li class="fragment fade-up" data-fragment-index="1">CRPs cannot be reused</li>
                     <ul>
-                        <li>Limited amount of authentications</li>
-                        <li>Lots of CRPs to store</li>
+                        <li class="fragment fade-up" data-fragment-index="1">Limited amount of authentications</li>
+                        <li class="fragment fade-up" data-fragment-index="1">Lots of CRPs to store</li>
                     </ul>
-                    <li>No mutual authentication</li>
-                    <li>Vulnerable to Modeling attacks</li>
+                    <li class="fragment fade-up" data-fragment-index="2">No mutual authentication</li>
+                    <li class="fragment fade-up" data-fragment-index="3">Vulnerable to modeling attacks</li>
                 </ul>
                 <aside class="notes">
                     <ul>
@@ -386,9 +396,9 @@
                      <ul>
                          <li>Must have the same value to hash on each side</li>
                     </ul>
-                    <li>Error correction exposes some information about the actual result</li>
+                    <li class="fragment fade-up" data-fragment-index="1">Error correction exposes some information about the actual result</li>
                     <ul>
-                        <li>Find a balance between error margin and remaining unpredictability</li>
+                        <li class="fragment fade-up" data-fragment-index="1">Find a balance between error margin and remaining unpredictability</li>
                     </ul>
                 </ul>
             <aside class="notes">
@@ -447,17 +457,17 @@
             <section data-transition="convex">
                 <h2>Using Elliptic Curve Cryptography (ECC)</h2>
                 <ul>
-                    <li>Small key size</li>
                     <li>Server only stores Public Keys of the devices</li>
                     <li>Used challenge and according helper data are public</li>
                     <li>Private key reconstructed with PUF</li>
                     <ul>
                         <li>Only exists in memory when it is needed</li>
                     </ul>
-                    <li>Key exchange possible</li>
+                    <li>Creation of a secure channel possible</li>
                 </ul>
                 <aside class="notes">
                     <ul>
+                        <li>challenge and helper data selected to reconstruct PRIVATE key</li>
                         <li>Error correction necessary on device</li>
                         <li>Exchange a secure session key</li>
                         <li>ECC ElGamal proposed in literature</li>
@@ -499,7 +509,7 @@
              <section data-transition="convex">
                 <h2>Enrollment</h2>
                  <ul>
-                    <li>Password consisting of two keys stored on server</li>
+                    <li>Password consisting of two equal keys stored on server</li>
                      <li>VOS influenced adder is profiled and modeled</li>
                  </ul>
                  <aside class="notes">
@@ -540,6 +550,11 @@
                     <li>Hardware security primitives are very promising</li>
                 </ul>
             </section>
+             
+             <aside class="notes">
+                    <p>Hardware sec primitives active research</p>
+                    <p>So that your loved gadgest don't turn rogue</p>
+                </aside>
         </section>
     </div>
 </div>
